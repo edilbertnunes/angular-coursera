@@ -56,22 +56,27 @@
 
   <div fxFlex>
     <h2>Corporate Leadership</h2>
-  <div fxLayout="column" fxLayoutGap="10px">
-    <mat-list fxFlex *ngIf="leaders" [@expand]>
-      <mat-list-item *ngFor="let leader of leaders" >
-        <img mat-list-avatar src={{leader.image}} alt={{leader.name}}>
-        <h1 mat-line> {{leader.name}} {{leader.abbr}} </h1>
-        <p mat-line>
-          <span> {{leader.designation}} </span>
-        </p>
-        <p mat-line>
-          <span> {{leader.description}} </span>
-        </p>
-      </mat-list-item>
-    </mat-list>
-
-  </div>
-  <div fxFlex [hidden]="leader">
-    <mat-spinner></mat-spinner><h4>Loading... Please Wait!</h4>
-  </div>
+    <div fxLayout="column" fxLayoutGap="10px" *ngIf="leaders" [@expand]>
+      <mat-list fxFlex>
+        <mat-list-item *ngFor="let leader of leaders">
+          <img mat-list-avatar src="{{BaseURL + leader.image}}" alt={{leader.name}}>
+          <h1 mat-line> {{leader.name}} {{leader.abbr}} </h1>
+          <p mat-line>
+            <span> {{leader.designation}} </span>
+          </p>
+          <p mat-line>
+            <span> {{leader.description}} </span>
+          </p>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  
+    <div [hidden]="leaders || errMess">
+      <mat-spinner></mat-spinner>
+      <h4>Loading . . . Please Wait Leader</h4>
+    </div>
+    <div *ngIf="errMess">
+      <h2>Error</h2>
+      <h4>{{errMess}}</h4>
+    </div>
 </div>

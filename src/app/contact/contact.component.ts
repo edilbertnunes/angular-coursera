@@ -1,25 +1,30 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Feedback, ContactType } from '../shared/feedback';
-import { flyInOut } from '../animations/app.animation';
+import { flyInOut, expand } from '../animations/app.animation';
+import { FeedbackService } from '../services/feedback.service';
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss'],
   host: {
-    '@flyInOut': 'true',
+    '[@flyInOut]': 'true',
     'style': 'display: block;'
-  },
+    },
   animations: [
-    flyInOut()
+    flyInOut(),
+    expand()
   ]
 })
+
 export class ContactComponent implements OnInit {
 
   feedbackForm: FormGroup;
   feedback: Feedback;
+  feedbackCopy: Feedback = null;
   contactType = ContactType;
+  spinnerVisibility: boolean = false;
   @ViewChild('fform') feedbackFormDirective;
 
   formErrors = {
@@ -29,30 +34,30 @@ export class ContactComponent implements OnInit {
     'email': ''
   };
 
-  validationMessagens = {
+  validationMessages = {
     'firstname': {
-      'required': 'First name is required.',
-      'minlength': 'First name must be at least 2 characters.',
-      'maxlength': 'First name cannot be more than 25 characters.'
+      'required':      'First Name is required.',
+      'minlength':     'First Name must be at least 2 characters long.',
+      'maxlength':     'FirstName cannot be more than 25 characters long.'
     },
     'lastname': {
-      'required': 'Last name is required.',
-      'minlength': 'Last name must be at least 2 characters.',
-      'maxlength': 'Last name cannot be more than 25 characters.'
+      'required':      'Last Name is required.',
+      'minlength':     'Last Name must be at least 2 characters long.',
+      'maxlength':     'Last Name cannot be more than 25 characters long.'
     },
     'telnum': {
-      'required': 'Tel. number is required.',
-      'pattern': 'Tel. number must contain only numbers.'
+      'required':      'Tel. number is required.',
+      'pattern':       'Tel. number must contain only numbers.'
     },
     'email': {
-      'required': 'Email is required.',
-      'email': 'Email not in valid format.'
-    }
+      'required':      'Email is required.',
+      'email':         'Email not in valid format.'
+    },
   };
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+    private feedbackService: FeedbackService) {
     this.createForm();
-
    }
 
   ngOnInit() {
@@ -70,24 +75,25 @@ export class ContactComponent implements OnInit {
     });
 
     this.feedbackForm.valueChanges
-    .subscribe(data => this.onValueChanged(data));
+      .subscribe(data => this.onValueChanged(data));
 
-    this.onValueChanged(); // (re)set form validation messages
+    this.onValueChanged(); // (re)set validation messages now
+
   }
 
   onValueChanged(data?: any) {
-    if(!this.feedbackForm) {return;}
+    if (!this.feedbackForm) { return; }
     const form = this.feedbackForm;
-    for (const field in this.formErrors){
-      if(this.formErrors.hasOwnProperty(field)){
-        //clear previous error message (if any)
+    for (const field in this.formErrors) {
+      if (this.formErrors.hasOwnProperty(field)) {
+        // clear previous error message (if any)
         this.formErrors[field] = '';
         const control = form.get(field);
-        if(control && control.dirty && !control.valid) {
-          const messages = this.validationMessagens[field];
+        if (control && control.dirty && !control.valid) {
+          const messages = this.validationMessages[field];
           for (const key in control.errors) {
-            if(control.errors.hasOwnProperty(key)){
-              this.formErrors[field] +=messages[key]+ ' ';
+            if (control.errors.hasOwnProperty(key)) {
+              this.formErrors[field] += messages[key] + ' ';
             }
           }
         }
@@ -96,8 +102,19 @@ export class ContactComponent implements OnInit {
   }
 
   onSubmit() {
-    this.feedback = this.feedbackForm.value;
-    console.log(this.feedback);
+    this.spinnerVisibility = true;
+    this.feedbackCopy = this.feedbackForm.value;
+    this.feedbackService.submitFeedback(this.feedbackCopy)
+      .subscribe(feedback => 
+        { setTimeout(() => 
+          {
+            this.feedback = feedback; this.spinnerVisibility = false; 
+            console.log(this.feedback); 
+            setTimeout(() => this.feedback = null, 5000);
+          }
+          , 2000);
+        }
+      );
     this.feedbackForm.reset({
       firstname: '',
       lastname: '',
