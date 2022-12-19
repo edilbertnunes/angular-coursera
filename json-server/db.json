@@ -192,7 +192,7 @@
       "description": "Featuring mouthwatering combinations with a choice of five different salads, six enticing appetizers, six main entrees and five choicest desserts. Free flowing bubbly and soft drinks. All for just $19.99 per person "
     }
   ],
-  "leadership": [
+  "leaders": [
     {
       "id": "0",
       "name": "Peter Pan",
@@ -230,5 +230,46 @@
       "description": "Award winning three-star Michelin chef with wide International experience having worked closely with whos-who in the culinary world, he specializes in creating mouthwatering Indo-Italian fusion experiences. He says, Put together the cuisines from the two craziest cultures, and you get a winning hit! Amma Mia!"
     }
   ],
-  "feedback": []
+  "feedback": [
+    {
+      "firstname": "Edilbert",
+      "lastname": "Nunes",
+      "telnum": "32121212",
+      "email": "edilbert.nunes@gmail.com",
+      "agree": false,
+      "contacttype": "Email",
+      "message": "Teste",
+      "id": 1
+    },
+    {
+      "firstname": "Edilbert",
+      "lastname": "Nunes",
+      "telnum": "32121212",
+      "email": "edilbert.nunes@gmail.com",
+      "agree": true,
+      "contacttype": "Email",
+      "message": "Muito top esse site em angular",
+      "id": 2
+    },
+    {
+      "firstname": "Edilbert",
+      "lastname": "Nunes",
+      "telnum": "32121212",
+      "email": "edilbert.nunes@gmail.com",
+      "agree": true,
+      "contacttype": "Email",
+      "message": "Great job",
+      "id": 3
+    },
+    {
+      "firstname": "Edilbert",
+      "lastname": "Nunes",
+      "telnum": "32121212",
+      "email": "edilbert.nunes@gmail.com",
+      "agree": true,
+      "contacttype": "Email",
+      "message": "Teste great",
+      "id": 4
+    }
+  ]
 }
